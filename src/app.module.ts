@@ -3,7 +3,7 @@ import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { User } from './users/user.entity';
+import { Users } from './users/users.entity';
 import { Reports } from './reports/reports.entity';
 
 
@@ -19,9 +19,9 @@ import { Reports } from './reports/reports.entity';
     host : process.env.POSTGRE_HOST,
     port : parseInt(process.env.POSTGRE_PORT),
     password : process.env.POSTGRE_PASSWORD,
-    entities : [User , Reports],
-    synchronize : true,
     username : process.env.POSTGRE_USERNAME,
+    entities : [Users , Reports],
+    synchronize : true,
   }) , 
   UsersModule, ReportsModule]
 })
