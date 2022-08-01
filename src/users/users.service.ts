@@ -27,7 +27,6 @@ export class UsersService {
     }
     async findUserByEmail(email : string) {
         return this.repo.findOne({where : {email}})
-
     }
     async updateUserById(id : number , updateData : Partial<Users>) {
         const user = await this.findUserById(id)
