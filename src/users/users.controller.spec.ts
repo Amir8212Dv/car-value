@@ -2,15 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service'
 import { AuthService } from './auth.service'
-import { BadRequestException, INestApplication } from '@nestjs/common';
-import * as request from 'supertest'
+import { BadRequestException } from '@nestjs/common';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let fakeUserService : Partial<UsersService>
   let fakeAuthService : Partial<AuthService>
-  let app : INestApplication
-  let createdUserId : number
 
   beforeAll(async () => {
     fakeUserService = {
@@ -48,8 +45,6 @@ describe('UsersController', () => {
 
     controller = module.get<UsersController>(UsersController);
 
-    app = module.createNestApplication()
-    await app.init()
   });
 
   it('should be defined', () => {
@@ -71,27 +66,34 @@ describe('UsersController', () => {
     expect(controller.getProfile(undefined , 0)).rejects.toThrowError(new BadRequestException('please login first'))
   })
   it('Update user' , async () => {
-    const message = await controller.updateUserById('1' , {email : 'newTestEmail@test.com' , password : 'newTestPassword'})
+    const {message} = await controller.updateUserById('1' , {email : 'newTestEmail@test.com' , password : 'newTestPassword'})
 
-    expect(message.message).toBe('user updated successfully')
+    expect(message).toBe('user updated successfully')
   })
   it('Delete user' , async () => {
-    const message = await controller.deleteUserById('1')
-    expect(message.message).toBe('user deleted successfully')
+    const {message} = await controller.deleteUserById('1')
+    expect(message).toBe('user deleted successfully')
   })
   it('Sign in' , async () => {
-    
+    const user = await controller.signin({email : 'test@test.com' , password : 'testPassword'} , {})
+    expect(user).toBeDefined()
   })
   it('Sign in while already signed in' , async () => {
-    
+    expect(controller.signin({email : 'test@test.com' , password : 'testPassword'} , {userId : 1}))
+    .rejects
+    .toThrowError(new BadRequestException('you are already loged in'))
   })
   it('Sign up' , async () => {
-    
+    const user = await controller.signup({email : 'test@test.com' , password : 'testPassword'} , {})
+    expect(user).toBeDefined()
   })
   it('Sign up while already signed in' , async () => {
-    
+    expect(controller.signup({email : 'test@test.com' , password : 'testPassword'} , {userId : 1}))
+    .rejects
+    .toThrowError(new BadRequestException('you are already loged in'))
   })
   it('sign out' , async () => {
-    
+    const {message} = await controller.signout({userId : 1})
+    expect(message).toBe('you loged out successfully')
   })
 });

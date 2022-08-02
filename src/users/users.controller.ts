@@ -20,7 +20,7 @@ export class UsersController {
     }
     @serialize(UserResponseDto)
     @Post('/signup')
-    async createUser(@Body() body : CreateUserDto , @Session() session : any) {
+    async signup(@Body() body : CreateUserDto , @Session() session : any) {
         if(session && session.userId) throw new BadRequestException('you are already loged in')
         const user = await this.AuthService.signup(body.email , body.password)
 
@@ -29,7 +29,7 @@ export class UsersController {
     }
     @serialize(UserResponseDto)
     @Post('/signin')
-    async login(@Body() body : CreateUserDto , @Session() session : any){
+    async signin(@Body() body : CreateUserDto , @Session() session : any){
         if(session.userId) throw new BadRequestException('you are already loged in')
         const user = await this.AuthService.signin(body.email , body.password)
 
