@@ -39,7 +39,7 @@ export class UsersService {
     async deleteUserById(id : number) {
         const user = await this.findUserById(id)
         if(!user) throw new NotFoundException(`user with id ${id} not found`)
-
+        
         await this.repo.remove(user)
     }
 }

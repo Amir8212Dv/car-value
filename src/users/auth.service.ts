@@ -20,9 +20,7 @@ export class AuthService {
     async signin(email: string , password : string) {
         const user = await this.userService.findUserByEmail(email)
         if(!user) throw new BadRequestException('email or password is wrong')
-        console.log(user.password , password)
         const checkPassword = validateHashedPassword(user.password , password)
-        console.log(checkPassword)
         if(!checkPassword) throw new BadRequestException('email or password is wrong')
         return user
     }

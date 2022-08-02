@@ -54,7 +54,8 @@ export class UsersController {
     }
     @Delete('/:id')
     async deleteUserById(@Param('id') id : string) {
-        await this.userService.deleteUserById(+id)
+        const userId = +(id.replace(':' , ''))
+        await this.userService.deleteUserById(userId)
 
         return {message : 'user deleted successfully'}
     }
